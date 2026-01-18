@@ -1,14 +1,59 @@
 # Complete-Guided-Exercise-Deploy-Applications-to-AKS
-projekt stworzony na zajęcia WSB-NLU
+Projekt stworzony na zajęcia WSB-NLU
+
+Azure Container Registry - data 
+
+| Settings | Value |
+| :--- | :--- |
+| Resource Group | acr-01-RG |
+| Registry Name | wbnluromanczyzycki | 
+| Region | francecentral | 
+| Availability zone | None | 
+| SKU | Basic| 
 
 
-![](img/image.png)
+Virtual Network
+| Settings | Value | 
+| :--- | :--- | 
+| Resource Group | acr-01-RG |
+| Virtual network name | vnet-01 |
+| Region | francecentral | 
 
 
-<img src="img/image.png" width="70% title="Azure Portal View">
-<img src="img/image.png" alt="Screenshot" width="500"/>
+# Sprawozdanie – AKS + ACR
 
+## 1. Zakres ćwiczenia
+- ACR: utworzenie i integracja z AKS
+- AKS: Linux + Windows node pools
+- Deployment aplikacji kontenerowych
+- Weryfikacja i cleanup
 
-<a href="https://raw.githubusercontent.com/…/obrazek.png" target="_blank">
-  <img src="img/image.png" style="max-width:300px; cursor:zoom-in;" />
-</a>
+## 2. Architektura (stan końcowy)
+| Komponent | Konfiguracja |
+|--------|-------------|
+| ACR | Basic, francecentral |
+| AKS | Azure CNI |
+| Linux node pool | 2 × B4ms |
+| Windows node pool | 2 × B4ms |
+| VNET | 10.0.0.0/16 |
+| Subnet AKS | 10.0.0.0/20 |
+
+## 3. Obrazy kontenerowe
+| Image | OS | Runtime | Registry |
+|----|----|--------|--------|
+| hellofromnode:v1.0 | Linux | Node.js 20 | ACR |
+| hellofromdotnet:v1.0 | Windows | .NET 7 | ACR |
+
+## 4. Kubernetes
+- Namespaces: dev-node, dev-dotnet
+- nodeSelector: linux / windows
+- Services: LoadBalancer
+
+## 5. Weryfikacja
+- Deployment status: OK
+- External IP: OK
+- Dostęp HTTP: OK
+
+## 6. Wnioski techniczne
+- Windows node pool ⇒ Azure CNI
+- ACR Tasks ⇒ brak lokalnego Dockera
